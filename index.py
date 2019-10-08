@@ -7,23 +7,17 @@ import time
 import cv2
 import os
 
+from constants import CLASSES, PROTOTEXT, MODEL, IMAGE, CONFIDENCE, IMAGE_SIZE
+from app.image import get_input_blob
+from app.mobilenet import read_network
+
 # initialize the list of class labels MobileNet SSD was trained to
 # detect, then generate a set of bounding box colors for each class
-CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
-           "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
-           "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
-           "sofa", "train", "tvmonitor"]
-COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
-PROTOTEXT = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.prototxt.txt"
-MODEL = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.caffemodel"
-IMAGE = os.getcwd() + os.sep + "resources" + os.sep + "images" + os.sep + "example_02.jpg"
-CONFIDENCE = 0.2
 
-network = cv2.dnn.readNetFromCaffe(PROTOTEXT, MODEL)
-image = cv2.imread(IMAGE)
-(h, w) = image.shape[:2]
-blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 0.007843,
-                             (300, 300), 127.5)
+COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
+
+network = read_network()
+[image, blob, h, w] = get_input_blob()
 network.setInput(blob)
 detections = network.forward()
 
