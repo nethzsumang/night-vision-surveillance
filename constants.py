@@ -8,8 +8,8 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 
 PROTOTEXT = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.prototxt.txt"
 MODEL = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.caffemodel"
-IMAGE = os.getcwd() + os.sep + "resources" + os.sep + "images" + os.sep + "example_02.jpg"
+IMAGE = os.getcwd() + os.sep + "resources" + os.sep + "images" + os.sep + "bus_and_car.jpg"
 
-CONFIDENCE = 0.2
+CONFIDENCE = 0.5
 
 IMAGE_SIZE = (300, 300)
