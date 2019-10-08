@@ -10,9 +10,9 @@ import os
 # initialize the list of class labels MobileNet SSD was trained to
 # detect, then generate a set of bounding box colors for each class
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
-    "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
-    "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
-    "sofa", "train", "tvmonitor"]
+           "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
+           "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
+           "sofa", "train", "tvmonitor"]
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 PROTOTEXT = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.prototxt.txt"
 MODEL = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.caffemodel"
@@ -23,13 +23,12 @@ network = cv2.dnn.readNetFromCaffe(PROTOTEXT, MODEL)
 image = cv2.imread(IMAGE)
 (h, w) = image.shape[:2]
 blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 0.007843,
-	(300, 300), 127.5)
+                             (300, 300), 127.5)
 network.setInput(blob)
 detections = network.forward()
 
 for i in np.arange(0, detections.shape[2]):
-    # extract the confidence (i.e., probability) associated with the
-    # prediction
+    # extract the confidence (i.e., probability) associated with the prediction
     confidence = detections[0, 0, i, 2]
 
     # filter out weak detections by ensuring the `confidence` is
