@@ -1,13 +1,7 @@
-from imutils.video import VideoStream
-from imutils.video import FPS
 import numpy as np
-import argparse
-import imutils
-import time
 import cv2
-import os
 
-from constants import CLASSES, PROTOTEXT, MODEL, IMAGE, CONFIDENCE, IMAGE_SIZE
+from constants import CLASSES, CONFIDENCE
 from app.image import get_input_blob
 from app.mobilenet import read_network
 
