@@ -72,4 +72,12 @@ class Detection:
         self.classification = arr[1]
 
     def get_real_coordinates(self, width, height):
+        """
+            Gets the real coordinates based on the height
+            and width of the real image
+
+            :param width:
+            :param height:
+            :return:
+        """
         return (self.coordinates * np.array([width, height, width, height])).astype("int")
