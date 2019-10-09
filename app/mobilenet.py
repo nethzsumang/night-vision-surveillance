@@ -19,7 +19,10 @@ class Network:
     # confidence level threshold
     confidence_threshold = 0.
 
-    def __init__(self, model_path, prototext_path, confidence=0.2):
+    # important classes
+    important_classes = []
+
+    def __init__(self, model_path, prototext_path, confidence=0.2, important_classes=None):
         """
             Constructor.
 
@@ -28,6 +31,7 @@ class Network:
         """
         self.network = cv2.dnn.readNetFromCaffe(prototext_path, model_path)
         self.confidence_threshold = confidence
+        self.important_classes = range(21) if  important_classes is None else important_classes
 
     def set_input(self, input_image):
         """
@@ -47,7 +51,8 @@ class Network:
         detections = np.array(
             [
                 Detection(detection)
-                for detection in self.network.forward()[0, 0] if detection[2] > self.confidence_threshold
+                for detection in self.network.forward()[0, 0]
+                if (detection[2] > self.confidence_threshold) and (detection[1] in self.important_classes)
             ]
         )
         return detections

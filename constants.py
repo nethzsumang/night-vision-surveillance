@@ -6,8 +6,9 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
            "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
            "sofa", "train", "tvmonitor"]
+IMPORTANT_CLASSES = [12, 8, 15, 7]
 
-COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
+COLORS = np.random.uniform(127, 255, size=(len(CLASSES), 3))
 PROTOTEXT = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.prototxt.txt"
 MODEL = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.caffemodel"
 IMAGE_PATH = os.getcwd() + os.sep + "resources" + os.sep + "images" + os.sep + "example_05.jpg"

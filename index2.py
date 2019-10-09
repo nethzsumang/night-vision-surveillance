@@ -1,11 +1,11 @@
 import cv2
 
-from constants import CLASSES, IMAGE_SIZE, MODEL, PROTOTEXT, COLORS, CONFIDENCE
+from constants import CLASSES, IMPORTANT_CLASSES, IMAGE_SIZE, MODEL, PROTOTEXT, COLORS, CONFIDENCE
 from app.video import Video
 from app.image import Image
 from app.mobilenet import Network
 
-network = Network(MODEL, PROTOTEXT, confidence=CONFIDENCE)
+network = Network(MODEL, PROTOTEXT, confidence=CONFIDENCE, important_classes=IMPORTANT_CLASSES)
 video_obj = Video()
 video_obj.start()
 
