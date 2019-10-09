@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from constants import PROTOTEXT, MODEL, CONFIDENCE
 
 
 class Network:
@@ -17,14 +16,18 @@ class Network:
     # result of the network
     detections = None
 
-    def __init__(self, model_path, prototext_path):
+    # confidence level threshold
+    confidence_threshold = 0.
+
+    def __init__(self, model_path, prototext_path, confidence=0.2):
         """
             Constructor.
 
             :param model_path:
             :param prototext_path:
         """
-        self.network = cv2.dnn.readNetFromCaffe(PROTOTEXT, MODEL)
+        self.network = cv2.dnn.readNetFromCaffe(prototext_path, model_path)
+        self.confidence_threshold = confidence
 
     def set_input(self, input_image):
         """
@@ -42,7 +45,10 @@ class Network:
             :return: np.array
         """
         detections = np.array(
-            [Detection(detection) for detection in self.network.forward()[0, 0] if detection[2] > CONFIDENCE]
+            [
+                Detection(detection)
+                for detection in self.network.forward()[0, 0] if detection[2] > self.confidence_threshold
+            ]
         )
         return detections
 
