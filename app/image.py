@@ -15,14 +15,17 @@ class Image:
     # image itself
     image = None
 
-    def __init__(self, path):
+    def __init__(self, path=None, image=None):
         """
             Constructor.
 
             :param path:
         """
-        self.image = cv2.imread(path)
-        [self.height, self.width, _] = self.image.shape
+        if path is not None:
+            self.image = cv2.imread(path)
+            [self.height, self.width, _] = self.image.shape
+        else:
+            self.image = image
 
     def get_input_blob(self, blob_size):
         """

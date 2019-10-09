@@ -1,4 +1,3 @@
-import numpy as np
 import cv2
 
 from constants import CLASSES, IMAGE_PATH, IMAGE_SIZE, MODEL, PROTOTEXT, COLORS, CONFIDENCE
@@ -6,7 +5,7 @@ from app.image import Image
 from app.mobilenet import Network
 
 network = Network(MODEL, PROTOTEXT, confidence=CONFIDENCE)
-image_obj = Image(IMAGE_PATH)
+image_obj = Image(path=IMAGE_PATH)
 blob = image_obj.get_input_blob(IMAGE_SIZE)
 network.set_input(blob)
 detections = network.run()

@@ -75,7 +75,7 @@ class Detection:
         """
         self.confidence = arr[2]
         self.coordinates = arr[3:7]
-        self.classification = arr[1]
+        self.classification = int(arr[1])
 
     def get_real_coordinates(self, width, height):
         """
