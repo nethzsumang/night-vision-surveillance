@@ -10,7 +10,7 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 PROTOTEXT = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.prototxt.txt"
 MODEL = os.getcwd() + os.sep + "resources" + os.sep + "MobileNetSSD_deploy.caffemodel"
-IMAGE = os.getcwd() + os.sep + "resources" + os.sep + "images" + os.sep + "bus_and_car.jpg"
+IMAGE_PATH = os.getcwd() + os.sep + "resources" + os.sep + "images" + os.sep + "bus_and_car.jpg"
 
 CONFIDENCE = 0.5
 
