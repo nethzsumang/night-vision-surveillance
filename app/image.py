@@ -27,11 +27,11 @@ class Image:
         else:
             self.image = image
 
-    def get_input_blob(self, blob_size):
+    def get_input_blob(self, blob_size, swapRB=False):
         """
             Get input blob to be used in the network
 
             :param blob_size:
             :return:
         """
-        return cv2.dnn.blobFromImage(cv2.resize(self.image, blob_size), 0.007843, blob_size, 127.5)
+        return cv2.dnn.blobFromImage(cv2.resize(self.image, blob_size), 0.007843, blob_size, 127.5, swapRB=swapRB)
