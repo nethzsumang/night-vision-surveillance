@@ -16,4 +16,4 @@ class Network:
         self.network.setInput(input_data)
 
     def run(self):
-        return self.network.forward()
+        return self.network.forward(self.layer_names)

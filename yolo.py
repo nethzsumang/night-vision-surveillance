@@ -15,7 +15,7 @@ while True:
     frame = video_obj.video_stream.read()
     (h, w) = frame.shape[:2]
     image_obj = Image(image=frame)
-    blob = image_obj.get_input_blob(416, swapRB=True)
+    blob = image_obj.get_input_blob((416, 416), swapRB=True)
     network_obj.set_input(blob)
     layer_outputs = network_obj.run()
 
@@ -71,4 +71,4 @@ while True:
     # update the FPS counter
     video_obj.fps.update()
 
-video_obj.video_stream.release()
+video_obj.video_stream.stop()
