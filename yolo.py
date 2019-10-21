@@ -6,10 +6,11 @@ from imutils.video import VideoStream
 from imutils.video import FPS
 
 LABELS_PATH = "resources" + os.sep + "yolo" + os.sep + "coco.names"
-WEIGTHS_PATH = "resources" + os.sep + "yolo" + os.sep + "yolov3.weights"
+WEIGTHS_PATH = "resources" + os.sep + "yolo" + os.sep + "yolov3-tiny.weights"
 CFG_PATH = "resources" + os.sep + "yolo" + os.sep + "yolov3.cfg"
 LABELS = open(LABELS_PATH).read().strip().split("\n")
-CONFIDENCE = 0.5
+NECESSARY_CLASSES = [0, 16, 15]
+CONFIDENCE = 0.3
 THRESHOLD = 0.3
 
 # initialize a list of colors to represent each possible class label
@@ -63,7 +64,7 @@ while True:
 
 			# filter out weak predictions by ensuring the detected
 			# probability is greater than the minimum probability
-			if confidence > CONFIDENCE:
+			if confidence > CONFIDENCE and classID in NECESSARY_CLASSES:
 				# scale the bounding box coordinates back relative to
 				# the size of the image, keeping in mind that YOLO
 				# actually returns the center (x, y)-coordinates of
@@ -114,4 +115,6 @@ while True:
 
 # release the file pointers
 print("[INFO] cleaning up...")
-vs.release()
+fps.stop()
+cv2.destroyAllWindows()
+vs.stop()

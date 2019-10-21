@@ -111,4 +111,4 @@ dmypy.json
 
 venv
 # big file
-yolov3.weights
+yolov3-tiny.weights
