@@ -1,9 +1,11 @@
 import numpy as np
 import time
+from datetime import date
 import cv2
 import os
 from imutils.video import VideoStream
 from imutils.video import FPS
+from datetime import date
 
 LABELS_PATH = "resources" + os.sep + "yolo" + os.sep + "coco.names"
 WEIGTHS_PATH = "resources" + os.sep + "yolo" + os.sep + "yolov3-tiny.weights"
@@ -23,6 +25,11 @@ print("[INFO] loading YOLO from disk...")
 net = cv2.dnn.readNetFromDarknet(CFG_PATH, WEIGTHS_PATH)
 ln = net.getLayerNames()
 ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+
+# initialize the video writer
+now = date.today()
+filename = "surveillance_" + now.strftime("%Y-%m-%d_%H:%M:%S") + ".mp4"
+writer = cv2.VideoWriter(filename, cv2.VideoWriter_fourcc(*"MP4V"), 20, (416, 416))
 
 # initialize the video stream, allow the cammera sensor to warmup,
 # and initialize the FPS counter
@@ -102,6 +109,9 @@ while True:
 			text = "{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
 			cv2.putText(frame, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
+	# write the frame to file
+	writer.write(frame)
+
 	# show the output frame
 	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
@@ -118,3 +128,4 @@ print("[INFO] cleaning up...")
 fps.stop()
 cv2.destroyAllWindows()
 vs.stop()
+writer.release()
