@@ -45,6 +45,11 @@ while True:
 	frame = vs.read()
 	(H, W) = frame.shape[:2]
 
+	# [UNTESTED] Downsize frame image if
+	# image has height and width over 600
+	if H > 600 and W > 600:
+		frame = cv2.resize(frame, (540, 540), cv2.INTER_AREA)
+
 	# construct a blob from the input frame and then perform a forward
 	# pass of the YOLO object detector, giving us our bounding boxes
 	# and associated probabilities
