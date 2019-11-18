@@ -10,6 +10,7 @@ from datetime import date
 LABELS_PATH = "resources" + os.sep + "yolo" + os.sep + "coco.names"
 WEIGTHS_PATH = "resources" + os.sep + "yolo" + os.sep + "yolov3-tiny.weights"
 CFG_PATH = "resources" + os.sep + "yolo" + os.sep + "yolov3.cfg"
+
 LABELS = open(LABELS_PATH).read().strip().split("\n")
 NECESSARY_CLASSES = [0, 1, 2, 3, 15, 16]
 CONFIDENCE = 0.3
