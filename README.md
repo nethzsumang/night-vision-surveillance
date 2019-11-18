@@ -11,3 +11,4 @@
 ### Sources
 * https://www.pyimagesearch.com/2017/09/11/object-detection-with-deep-learning-and-opencv/
 * https://www.pyimagesearch.com/2017/09/18/real-time-object-detection-with-deep-learning-and-opencv/
+* https://www.learnopencv.com/read-write-and-display-a-video-using-opencv-cpp-python/
