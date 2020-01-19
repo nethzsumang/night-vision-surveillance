@@ -14,4 +14,5 @@ def process(config):
 
     while True:
         [frame, h, w] = video_stream.get_frame()
-        layerOutput = yolo_service.forward_pass(frame)
+        layer_output = yolo_service.forward_pass(frame)
+        yolo_service.process_output(layer_output)

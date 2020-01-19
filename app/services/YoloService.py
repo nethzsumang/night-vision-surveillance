@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 
 class YoloService:
@@ -27,3 +28,15 @@ class YoloService:
         blob = cv2.dnn.blobFromImage(frame, scale, size)
         self.net.setInput(blob)
         return self.net.forward(self.ln)
+
+    def process_output(self, layer_outputs, width, height):
+        for output in layer_outputs:
+            for detection in output:
+                scores = detection[5:]
+                classID = np.argmax(scores)
+                confidence = scores[classID]
+
+                if confidence > self.config["settings"]["confidence"] and classID in self.config["settings"]["necessary_classes"]:
+                    box = detection[0:4] * np.array([width, height, width, height])
+                    (centerX, centerY, width, height) = box.astype("int")
+
