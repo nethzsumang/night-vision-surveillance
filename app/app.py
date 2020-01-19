@@ -15,7 +15,11 @@ def process(config):
 
     while True:
         [frame, h, w] = video_stream.get_frame()
-        layer_output = yolo_service.forward_pass(frame)
+        layer_output = yolo_service.forward_pass(
+            frame,
+            scale=float(config["settings"]["scale"]),
+            size=set(config["settings"]["frame_size"])
+        )
         [coordinates, colors, texts] = yolo_service.process_output(frame, layer_output)
 
         for coordinate, color, text in zip(coordinates, colors, texts):
