@@ -7,6 +7,8 @@ class YoloService:
         self.config = config
         self.labels = self.load_label()
         [self.ln, self.net] = self.load_network()
+        np.random.seed(42)
+        self.colors = np.random.randint(0, 255, size=(len(self.labels), 3), dtype="uint8")
 
     def load_label(self):
         try:
@@ -29,7 +31,15 @@ class YoloService:
         self.net.setInput(blob)
         return self.net.forward(self.ln)
 
-    def process_output(self, layer_outputs, width, height):
+    def process_output(self, frame, layer_outputs, width, height):
+        boxes = []
+        confidences = []
+        classIDs = []
+
+        coordinates = []
+        colors = []
+        texts = []
+
         for output in layer_outputs:
             for detection in output:
                 scores = detection[5:]
@@ -40,3 +50,25 @@ class YoloService:
                     box = detection[0:4] * np.array([width, height, width, height])
                     (centerX, centerY, width, height) = box.astype("int")
 
+                    x = int(centerX - (width / 2))
+                    y = int(centerY - (height / 2))
+
+                    boxes.append([x, y, int(width), int(height)])
+                    confidences.append(float(confidence))
+                    classIDs.append(classID)
+
+        idxs = cv2.dnn.NMSBoxes(boxes, confidences, self.config["settings"]["confidence"], self.config["settings"]["threshold"])
+        if len(idxs) > 0:
+            # loop over the indexes we are keeping
+            for i in idxs.flatten():
+                # extract the bounding box coordinates
+                (x, y) = (boxes[i][0], boxes[i][1])
+                (w, h) = (boxes[i][2], boxes[i][3])
+                color = [int(c) for c in self.colors[classIDs[i]]]
+                text = "{}: {:.4f}".format(self.labels[classIDs[i]], confidences[i])
+
+                coordinates.append([x, y, w, h])
+                colors.append(color)
+                texts.append(text)
+
+        return [coordinates, colors, texts]
