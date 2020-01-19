@@ -19,7 +19,7 @@ class YoloService:
 
     def load_network(self):
         try:
-            net = cv2.dnn.readNetFromDarknet(self.config["paths"]["config"], self.config["paths"]["weights"])
+            net = cv2.dnn.readNetFromDarknet(self.config["paths"]["cfg"], self.config["paths"]["weights"])
             ln = net.getLayerNames()
             ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
             return [ln, net]

@@ -7,3 +7,9 @@ class FPSService:
 
     def start(self):
         self.fps.start()
+
+    def update(self):
+        self.fps.update()
+
+    def stop(self):
+        self.fps.stop()

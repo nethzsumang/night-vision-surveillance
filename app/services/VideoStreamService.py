@@ -14,3 +14,6 @@ class VideoStreamService:
         frame = self.stream.read()
         (H, W) = frame.shape[:2]
         return [frame, H, W]
+
+    def stop(self):
+        self.stream.stop()

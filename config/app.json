@@ -9,9 +9,9 @@
     "confidence": 0.3,
     "threshold": 0.3,
     "frame_size": [416, 416],
-    "scale": "‭0.003921568627451‬"
+    "scale": "0.003921568627451"
   },
   "storage": {
-    "video_output_dir": "C:\\Users\\Kenneth\\Documents\\Projects\\night-vision-surveillance\\resources"
+    "video_output_dir": "C:\\Users\\Kenneth\\Documents\\Projects\\night-vision-surveillance\\resources\\"
   }
 }
