@@ -1,0 +1,12 @@
+{
+  "paths": {
+    "label": "resources/yolo/coco.names",
+    "weights": "resources/yolo/yolov3-tiny.weights",
+    "cfg": "resources/yolo/yolov3.cfg"
+  },
+  "settings": {
+    "necessary_classes": [0, 1, 2, 3, 15, 16],
+    "confidence": 0.3,
+    "threshold": 0.3
+  }
+}
