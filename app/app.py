@@ -5,11 +5,13 @@ from app.services.YoloService import YoloService
 from app.services.ImageProcessingService import ImageProcessingService
 from app.services.VideoWriterService import VideoWriterService
 import cv2
-from datetime import date
+import datetime
+import time
 
 
 def process(config):
-    filename = config["storage"]["video_output_dir"] + "surveillance_" + date.today().strftime("%Y-%m-%d_%H:%M:%S") + ".mp4"
+    filename = get_filename(config)
+    frame_arr = []
 
     fps = FPSService()
     video_stream = VideoStreamService()
@@ -18,6 +20,10 @@ def process(config):
 
     video_stream.start()
     fps.start()
+
+    # for the record of video
+    video_length = int(config["storage"]["video_length"])
+    time_start = time.time()
 
     while True:
         [frame, h, w] = video_stream.get_frame()
@@ -32,8 +38,17 @@ def process(config):
             ImageProcessingService.draw_rectangle(frame, coordinate, color)
             ImageProcessingService.put_text(frame, text, (coordinate[0], coordinate[1] - 5), color)
 
-        # pass frame to save
-        video_writer.write(frame)
+        time_diff = time.time() - time_start
+        if time_diff >= video_length:
+            filename = get_filename(config)
+            print(frame.shape)
+            video_writer = VideoWriterService(filename, dimensions=(frame.shape[0], frame.shape[1]))
+            thread = Thread(video_writer_fun, [video_writer, frame_arr], 1, "video_writer", delay=0)
+            thread.start()
+            time_start = time.time()
+        else:
+            frame_arr.append(frame)
+
         ImageProcessingService.show_image(frame)
         key = cv2.waitKey(1) & 0xFF
 
@@ -48,3 +63,15 @@ def process(config):
     video_stream.stop()
     fps.stop()
     cv2.destroyAllWindows()
+
+
+def video_writer_fun(args):
+    [writer, frame_arr] = args
+    for frame in frame_arr:
+        writer.write(frame)
+    writer.release()
+
+
+def get_filename(config):
+    return "surveillance_" + \
+           datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".mp4"
