@@ -16,7 +16,7 @@ def process(config):
     fps = FPSService()
     video_stream = VideoStreamService()
     yolo_service = YoloService(config)
-    video_writer = VideoWriterService(filename)
+    video_writer = VideoWriterService(filename, (640, 480))
 
     video_stream.start()
     fps.start()
@@ -42,7 +42,7 @@ def process(config):
         if time_diff >= video_length:
             filename = get_filename(config)
             print(frame.shape)
-            video_writer = VideoWriterService(filename, dimensions=(frame.shape[0], frame.shape[1]))
+            video_writer = VideoWriterService(filename, dimensions=(640, 480))
             thread = Thread(video_writer_fun, [video_writer, frame_arr], 1, "video_writer", delay=0)
             thread.start()
             time_start = time.time()
