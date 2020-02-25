@@ -1,0 +1,18 @@
+{
+  "paths": {
+    "label": "resources/yolo/coco.names",
+    "weights": "resources/yolo/yolov3-tiny.weights",
+    "cfg": "resources/yolo/yolov3.cfg"
+  },
+  "settings": {
+    "necessary_classes": [0, 1, 2, 3, 15, 16],
+    "confidence": 0.3,
+    "threshold": 0.3,
+    "frame_size": [416, 416],
+    "scale": "0.003921568627451"
+  },
+  "storage": {
+    "video_output_dir": "\\resources\\",
+    "video_length": "10"
+  }
+}
