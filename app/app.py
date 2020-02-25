@@ -67,7 +67,8 @@ def process(config):
 def video_writer_fun(args):
     [writer, frame_arr] = args
     for frame in frame_arr:
-        writer.write(frame)
+        for x in range(0, 3):
+            writer.write(frame)
     writer.release()
 
 
