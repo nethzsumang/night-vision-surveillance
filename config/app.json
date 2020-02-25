@@ -9,7 +9,9 @@
     "confidence": 0.3,
     "threshold": 0.3,
     "frame_size": [416, 416],
-    "scale": "0.003921568627451"
+    "scale": "0.003921568627451",
+    "skip_frames": 3,
+    "repeat_frames": 3
   },
   "storage": {
     "video_output_dir": "\\resources\\",
