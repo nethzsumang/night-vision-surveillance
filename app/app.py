@@ -4,6 +4,7 @@ from app.services.VideoStreamService import VideoStreamService
 from app.services.YoloService import YoloService
 from app.services.ImageProcessingService import ImageProcessingService
 from app.services.VideoWriterService import VideoWriterService
+from app.services.AlertService import AlertService
 import cv2
 import datetime
 import time
@@ -16,6 +17,7 @@ class App:
         self.video_stream_service = VideoStreamService()
         self.yolo_service = YoloService(config)
         self.video_writer_service = VideoWriterService("")
+        self.alert_service = AlertService(config)
 
     def process(self):
         try:
@@ -54,6 +56,7 @@ class App:
                 for coordinate, color, text in zip(coordinates, colors, texts):
                     ImageProcessingService.draw_rectangle(frame, coordinate, color)
                     ImageProcessingService.put_text(frame, text, (coordinate[0], coordinate[1] - 5), color)
+                    self.alert_service.alert()
                 to_skip = skip_frames
             else:
                 to_skip = to_skip - 1
