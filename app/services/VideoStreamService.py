@@ -17,3 +17,6 @@ class VideoStreamService:
 
     def stop(self):
         self.stream.stop()
+        print("Video stream stopped.")
+        self.stream.stream.release()
+        print("Video stream released.")

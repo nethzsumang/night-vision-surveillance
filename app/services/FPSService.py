@@ -13,3 +13,7 @@ class FPSService:
 
     def stop(self):
         self.fps.stop()
+        print("FPS stopped.")
+
+    def get_fps(self):
+        return self.fps.fps()
