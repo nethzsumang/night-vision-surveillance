@@ -9,77 +9,100 @@ import datetime
 import time
 
 
-def process(config):
-    filename = get_filename(config)
-    frame_arr = []
+class App:
+    def __init__(self, config):
+        self.config = config
+        self.fps_service = FPSService()
+        self.video_stream_service = VideoStreamService()
+        self.yolo_service = YoloService(config)
+        self.video_writer_service = VideoWriterService("")
 
-    fps = FPSService()
-    video_stream = VideoStreamService()
-    yolo_service = YoloService(config)
+    def process(self):
+        try:
+            self.main_process()
+        except Exception as e:
+            print(str(e))
+            self.fps_service.stop()
+            self.video_stream_service.stop()
+            self.video_writer_service.release()
 
-    video_stream.start()
-    fps.start()
+    def main_process(self):
+        filename = App.get_filename()
+        frame_arr = []
 
-    # for the record of video
-    video_length = int(config["storage"]["video_length"])
-    
-    skip_frames = int(config["settings"]["skip_frames"])
-    time_start = time.time()
-    
-    to_skip = 0
+        self.video_stream_service.start()
+        self.fps_service.start()
 
-    while True:
-        [frame, h, w] = video_stream.get_frame()
-        if to_skip == 0:
-            layer_output = yolo_service.forward_pass(
-                frame,
-                scale=float(config["settings"]["scale"]),
-                size=tuple(config["settings"]["frame_size"])
-            )
-            [coordinates, colors, texts] = yolo_service.process_output(frame, layer_output, w, h)
+        # for the record of video
+        video_length = int(self.config["storage"]["video_length"])
 
-            for coordinate, color, text in zip(coordinates, colors, texts):
-                ImageProcessingService.draw_rectangle(frame, coordinate, color)
-                ImageProcessingService.put_text(frame, text, (coordinate[0], coordinate[1] - 5), color)
-            to_skip = skip_frames
-        else:
-            to_skip = to_skip - 1
-        
-        time_diff = time.time() - time_start
-        if time_diff >= video_length:
-            filename = get_filename(config)
-            frame_dim = frame.shape
-            video_writer = VideoWriterService(filename, dimensions=(frame_dim[1], frame_dim[0]))
-            thread = Thread(video_writer_fun, [video_writer, frame_arr, config], 1, "video_writer", delay=0)
-            thread.start()
-            time_start = time.time()
-        else:
-            frame_arr.append(frame)
+        skip_frames = int(self.config["settings"]["skip_frames"])
+        time_start = time.time()
 
-        ImageProcessingService.show_image(frame)
-        key = cv2.waitKey(1) & 0xFF
+        to_skip = 0
 
-        # if the `q` key was pressed, break from the loop
-        if key == ord("q"):
-            break
+        while True:
+            [frame, h, w] = self.video_stream_service.get_frame()
+            if to_skip == 0:
+                layer_output = self.yolo_service.forward_pass(
+                    frame,
+                    scale=float(self.config["settings"]["scale"]),
+                    size=tuple(self.config["settings"]["frame_size"])
+                )
+                [coordinates, colors, texts] = self.yolo_service.process_output(frame, layer_output, w, h)
 
-        # update the FPS counter
-        fps.update()
+                for coordinate, color, text in zip(coordinates, colors, texts):
+                    ImageProcessingService.draw_rectangle(frame, coordinate, color)
+                    ImageProcessingService.put_text(frame, text, (coordinate[0], coordinate[1] - 5), color)
+                to_skip = skip_frames
+            else:
+                to_skip = to_skip - 1
 
-    video_writer.release()
-    video_stream.stop()
-    fps.stop()
-    cv2.destroyAllWindows()
+            time_diff = time.time() - time_start
+            if time_diff >= video_length:
+                filename = App.get_filename()
+                frame_dim = frame.shape
+                self.video_writer_service = VideoWriterService(filename, dimensions=(frame_dim[1], frame_dim[0]))
+                thread = Thread(
+                    App.video_writer_fun,
+                    [
+                        self.video_writer_service,
+                        frame_arr,
+                        self.config
+                    ],
+                    1,
+                    "video_writer",
+                    delay=0
+                )
+                thread.start()
+                time_start = time.time()
+            else:
+                frame_arr.append(frame)
 
+            ImageProcessingService.show_image(frame)
+            key = cv2.waitKey(1) & 0xFF
 
-def video_writer_fun(args):
-    [writer, frame_arr, config] = args
-    for frame in frame_arr:
-        for x in range(0, int(config["settings"]["repeat_frames"])):
-            writer.write(frame)
-    writer.release()
+            # if the `q` key was pressed, break from the loop
+            if key == ord("q"):
+                break
 
+            # update the FPS counter
+            self.fps_service.update()
 
-def get_filename(config):
-    return "surveillance_" + \
-           datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".mp4"
+        self.video_writer_service.release()
+        self.video_stream_service.stop()
+        self.fps_service.stop()
+        cv2.destroyAllWindows()
+
+    @staticmethod
+    def video_writer_fun(args):
+        [writer, frame_arr, config] = args
+        for frame in frame_arr:
+            for x in range(0, int(config["settings"]["repeat_frames"])):
+                writer.write(frame)
+        writer.release()
+
+    @staticmethod
+    def get_filename():
+        return "surveillance_" + \
+               datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".mp4"

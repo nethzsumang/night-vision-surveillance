@@ -1,7 +1,9 @@
 from utils.ConfigLoader import ConfigLoader
-from app.app import process
-from var_dump import var_dump
+from app.app import App
+import sys
 
 
 config_data = ConfigLoader.load_config("config/app.json")
-process(config_data)
+# process(config_data)
+App(config_data).process()
+sys.exit(0)
