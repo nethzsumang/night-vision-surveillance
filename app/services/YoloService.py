@@ -8,7 +8,6 @@ class YoloService:
         self.labels = self.load_label()
         [self.ln, self.net] = self.load_network()
         np.random.seed(42)
-        self.colors = np.random.randint(0, 255, size=(len(self.labels), 3), dtype="uint8")
 
     def load_label(self):
         try:
@@ -39,6 +38,8 @@ class YoloService:
         coordinates = []
         colors = []
         texts = []
+        label_names = []
+        accuracies = []
 
         for output in layer_outputs:
             for detection in output:
@@ -64,11 +65,14 @@ class YoloService:
                 # extract the bounding box coordinates
                 (x, y) = (boxes[i][0], boxes[i][1])
                 (w, h) = (boxes[i][2], boxes[i][3])
-                color = [int(c) for c in self.colors[classIDs[i]]]
+                color = [0, 0, 255]
                 text = "{}: {:.4f}".format(self.labels[classIDs[i]], confidences[i])
+                accuracy = confidences[i] * 100
 
                 coordinates.append([x, y, w, h])
                 colors.append(color)
                 texts.append(text)
+                accuracies.append(accuracy)
+                label_names.append(self.labels[classIDs[i]])
 
-        return [coordinates, colors, texts]
+        return [coordinates, colors, texts, accuracies, label_names]

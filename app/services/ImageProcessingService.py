@@ -24,3 +24,10 @@ class ImageProcessingService:
     @staticmethod
     def show_image(image):
         cv2.imshow("Frame", image)
+
+    @staticmethod
+    def save_image(image, filename):
+        import os
+
+        path = "resources" + os.sep + "saved_images" + os.sep + filename
+        cv2.imwrite(path, image)
