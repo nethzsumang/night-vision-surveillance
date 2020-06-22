@@ -46,6 +46,7 @@ class App:
 
         while True:
             [frame, h, w] = self.video_stream_service.get_frame()
+            copy = None
             if to_skip == 0:
                 layer_output = self.yolo_service.forward_pass(
                     frame,
@@ -73,10 +74,11 @@ class App:
             time_diff = time.time() - time_start
             if time_diff >= video_length:
                 filename = App.get_filename()
-                frame_dim = copy.shape
+                target = copy if copy is not None else frame
+                frame_dim = target.frame
                 self.video_writer_service = VideoWriterService(filename, dimensions=(frame_dim[1], frame_dim[0]))
                 video_writer_thread = Thread(self.video_writer_fun, [], 1, "video_writer", delay=0)
-                image_saver_thread = Thread(self.image_save_fun, copy, 2, "image_saver", delay=0)
+                image_saver_thread = Thread(self.image_save_fun, target, 2, "image_saver", delay=0)
                 video_writer_thread.start()
                 image_saver_thread.start()
                 time_start = time.time()
@@ -100,8 +102,8 @@ class App:
 
     def video_writer_fun(self, args):
         for frame in self.frame_arr:
-            for x in range(0, int(self.config["settings"]["repeat_frames"])):
-                self.video_writer_service.write(frame)
+            # for x in range(0, int(self.config["settings"]["repeat_frames"])):
+            self.video_writer_service.write(frame)
         self.frame_arr.clear()
         self.video_writer_service.release()
         # exit thread
