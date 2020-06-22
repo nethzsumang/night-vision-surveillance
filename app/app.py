@@ -75,7 +75,7 @@ class App:
             if time_diff >= video_length:
                 filename = App.get_filename()
                 target = copy if copy is not None else frame
-                frame_dim = target.frame
+                frame_dim = target.shape
                 self.video_writer_service = VideoWriterService(filename, dimensions=(frame_dim[1], frame_dim[0]))
                 video_writer_thread = Thread(self.video_writer_fun, [], 1, "video_writer", delay=0)
                 image_saver_thread = Thread(self.image_save_fun, target, 2, "image_saver", delay=0)
