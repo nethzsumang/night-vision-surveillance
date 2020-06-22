@@ -4,8 +4,8 @@ import time
 
 class Thread(threading.Thread):
     def __init__(self, process, args, threadID, name, delay=1):
-        self.daemon = True
         threading.Thread.__init__(self)
+        self.daemon = True
         self.threadID = threadID
         self.name = name
         self.delay = delay
