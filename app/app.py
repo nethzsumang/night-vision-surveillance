@@ -98,7 +98,7 @@ class App:
         self.fps_service.stop()
         cv2.destroyAllWindows()
 
-    def video_writer_fun(self):
+    def video_writer_fun(self, args):
         for frame in self.frame_arr:
             for x in range(0, int(self.config["settings"]["repeat_frames"])):
                 self.video_writer_service.write(frame)
