@@ -5,7 +5,7 @@
     "cfg": "resources/yolo/yolov3.cfg"
   },
   "settings": {
-    "necessary_classes": [0, 1, 2, 3, 15, 16],
+    "necessary_classes": [0],
     "confidence": 0.3,
     "threshold": 0.3,
     "frame_size": [416, 416],
