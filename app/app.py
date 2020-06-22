@@ -72,9 +72,9 @@ class App:
                 to_skip = to_skip - 1
 
             time_diff = time.time() - time_start
+            target = copy if copy is not None else frame
             if time_diff >= video_length:
                 filename = App.get_filename()
-                target = copy if copy is not None else frame
                 frame_dim = target.shape
                 self.video_writer_service = VideoWriterService(filename, dimensions=(frame_dim[1], frame_dim[0]))
                 video_writer_thread = Thread(self.video_writer_fun, [], 1, "video_writer", delay=0)
@@ -83,9 +83,9 @@ class App:
                 image_saver_thread.start()
                 time_start = time.time()
             else:
-                self.frame_arr.append(copy)
+                self.frame_arr.append(target)
 
-            ImageProcessingService.show_image(copy)
+            ImageProcessingService.show_image(target)
             key = cv2.waitKey(1) & 0xFF
 
             # if the `q` key was pressed, break from the loop
