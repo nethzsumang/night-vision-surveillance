@@ -15,7 +15,7 @@ class App:
     def __init__(self, config):
         self.config = config
         self.fps_service = FPSService()
-        self.video_stream_service = VideoStreamService()
+        self.video_stream_service = VideoStreamService(src=int(config["stream_settings"]["src"]))
         self.yolo_service = YoloService(config)
         self.video_writer_service = VideoWriterService("")
         self.alert_service = AlertService(config)

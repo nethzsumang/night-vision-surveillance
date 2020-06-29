@@ -4,6 +4,9 @@
     "weights": "resources/yolo/yolov3-tiny.weights",
     "cfg": "resources/yolo/yolov3.cfg"
   },
+  "stream_settings": {
+    "src": 0
+  },
   "settings": {
     "necessary_classes": [0],
     "confidence": 0.3,
